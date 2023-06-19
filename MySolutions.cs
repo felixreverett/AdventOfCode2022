@@ -35,7 +35,70 @@ namespace AdventOfCode2022
             Array.Sort(totalCaloriesArray);
             Console.WriteLine(totalCaloriesArray[totalCaloriesArray.Length - 1] + totalCaloriesArray[totalCaloriesArray.Length - 2] + totalCaloriesArray[totalCaloriesArray.Length - 3]);
         }
-        public void DayTwo()
+        public void DayTwoPartOne()
+        {
+            string[][] input = File.ReadAllText(@"D:\Programming\C#\AdventOfCode2022\Inputs\DayTwo.txt")
+                .Replace("\r", "")
+                .Split("\n").Select(i => i.Split(" ")).ToArray();
+
+            int totalScore = 0;
+            int valX = 1; int valY = 2; int valZ = 3;
+            int loss = 0; int draw = 3; int win = 6;
+            // A is rock | B is paper | C is scissors
+            // X is rock | Y is paper | Z is scissors
+            foreach (string[] game in input)
+            {
+                switch (game[0])
+                {
+                    case "A":
+                        switch (game[1])
+                        {
+                            case "X":
+                                totalScore += valX + draw;
+                                break;
+                            case "Y":
+                                totalScore += valY + win;
+                                break;
+                            case "Z":
+                                totalScore += valZ + loss;
+                                break;
+                        }
+                        break;
+                    case "B":
+                        switch (game[1])
+                        {
+                            case "X":
+                                totalScore += valX + loss;
+                                break;
+                            case "Y":
+                                totalScore += valY + draw;
+                                break;
+                            case "Z":
+                                totalScore += valZ + win;
+                                break;
+                        }
+                        break;
+                    case "C":
+                        switch (game[1])
+                        {
+                            case "X":
+                                totalScore += valX + win;
+                                break;
+                            case "Y":
+                                totalScore += valY + loss;
+                                break;
+                            case "Z":
+                                totalScore += valZ + draw;
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            Console.WriteLine(totalScore);
+        }
+
+        public void DayTwoPartTwo()
         {
             string[][] input = File.ReadAllText(@"D:\Programming\C#\AdventOfCode2022\Inputs\DayTwo.txt")
                 .Replace("\r", "")
@@ -96,6 +159,54 @@ namespace AdventOfCode2022
             }
 
             Console.WriteLine(totalScore);
+        }
+
+        public void DayThreePartOne()
+        {
+            char[] letterPriorities =
+            {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+            };
+
+            string[] input = File.ReadAllText(@"D:\Programming\C#\AdventOfCode2022\Inputs\DayThree.txt")
+                .Replace("\r", "")
+                .Split("\n").ToArray();
+
+            int totalPriorityScore = 0;
+
+            foreach (string rucksack in input)
+            {
+                char matchingChar = FindMeThatMatchingCharPleaseThanks(rucksack);
+                
+                totalPriorityScore += Array.IndexOf(letterPriorities, matchingChar) + 1;
+                
+            }
+
+            char FindMeThatMatchingCharPleaseThanks(string rucksack)
+            {
+                int length = rucksack.Length;
+                char matchingChar;
+                for (int i = 0; i < length / 2; i++)
+                {
+                    for (int j = length / 2; j < length; j++)
+                    {
+                        if (rucksack[i] == rucksack[j])
+                        {
+                            matchingChar = rucksack[i];
+                            return matchingChar;
+                        }
+                    }
+                }
+                return '_';
+            }
+
+            Console.WriteLine(totalPriorityScore);
+        }
+
+        public void DayThreePartTwo()
+        {
+
         }
     }
 }
