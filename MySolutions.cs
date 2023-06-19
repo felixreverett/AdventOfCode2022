@@ -42,53 +42,53 @@ namespace AdventOfCode2022
                 .Split("\n").Select(i => i.Split(" ")).ToArray();
 
             int totalScore = 0;
-            int valX = 1; int valY = 2; int valZ = 3;
+            int rock = 1; int paper = 2; int scissors = 3;
             int loss = 0; int draw = 3; int win = 6;
             // A is rock | B is paper | C is scissors
             // X is rock | Y is paper | Z is scissors
             foreach (string[] game in input)
             {
-                switch (game[0])
+                switch (game[1])
                 {
-                    case "A":
-                        switch (game[1])
+                    case "X": //need to lose
+                        switch (game[0])
                         {
-                            case "X":
-                                totalScore += valX + draw;
+                            case "A": //play scissors
+                                totalScore += loss + scissors;
                                 break;
-                            case "Y":
-                                totalScore += valY + win;
+                            case "B": //play rock
+                                totalScore += loss + rock;
                                 break;
-                            case "Z":
-                                totalScore += valZ + loss;
+                            case "C": //play paper
+                                totalScore += loss + paper;
                                 break;
                         }
                         break;
-                    case "B":
-                        switch (game[1])
+                    case "Y": //need to draw
+                        switch (game[0])
                         {
-                            case "X":
-                                totalScore += valX + loss;
+                            case "A": //play rock
+                                totalScore += draw + rock;
                                 break;
-                            case "Y":
-                                totalScore += valY + draw;
+                            case "B": //play paper
+                                totalScore += draw + paper;
                                 break;
-                            case "Z":
-                                totalScore += valZ + win;
+                            case "C": //play scissors
+                                totalScore += draw + scissors;
                                 break;
                         }
                         break;
-                    case "C":
-                        switch (game[1])
+                    case "Z": //need to win
+                        switch (game[0])
                         {
-                            case "X":
-                                totalScore += valX + win;
+                            case "A": //play paper
+                                totalScore += win + paper;
                                 break;
-                            case "Y":
-                                totalScore += valY + loss;
+                            case "B": //play scissors
+                                totalScore += win + scissors;
                                 break;
-                            case "Z":
-                                totalScore += valZ + draw;
+                            case "C": //play rock
+                                totalScore += win + rock;
                                 break;
                         }
                         break;
