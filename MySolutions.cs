@@ -249,5 +249,34 @@ namespace AdventOfCode2022
                 return '_';
             }
         }
+        public void DayFourPartOne()
+        {
+            char[] delimiters = { ',', '-' };
+
+            string[][] input = File.ReadAllText(@"D:\Programming\C#\AdventOfCode2022\Inputs\DayFour.txt")
+                .Replace("\r", "")
+                .Split("\n")
+                .Select(i => i.Split(delimiters))
+                .ToArray();
+
+            int pairsToReconsider = 0;
+            
+            foreach (string[] line in input)
+            {
+                //check if first elf's assignments contain second elf's.
+                if (int.Parse(line[0]) <= int.Parse(line[2]) && int.Parse(line[1]) >= int.Parse(line[3]))
+                {
+                    pairsToReconsider++;
+                }
+                //check if second elf's assignments contain first elf's.
+                else if (int.Parse(line[2]) <= int.Parse(line[0]) && int.Parse(line[3]) >= int.Parse(line[1]))
+                {
+                    pairsToReconsider++;
+                }
+            }
+
+            Console.WriteLine(pairsToReconsider);
+        }
+    
     }
 }
