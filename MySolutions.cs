@@ -277,6 +277,38 @@ namespace AdventOfCode2022
 
             Console.WriteLine(pairsToReconsider);
         }
-    
+
+        public void DayFourPartTwo()
+        {
+            char[] delimiters = { ',', '-' };
+
+            string[][] input = File.ReadAllText(@"D:\Programming\C#\AdventOfCode2022\Inputs\DayFour.txt")
+                .Replace("\r", "")
+                .Split("\n")
+                .Select(i => i.Split(delimiters))
+                .ToArray();
+
+            int pairsToReconsider = 0;
+
+            foreach (string[] line in input)
+            {
+                //check if first elf's upper >= second elf's lower or first elf's lower <= second elf's upper
+                //a-b,c-d
+                //if b >= c and a <= d
+                if (int.Parse(line[1]) >= int.Parse(line[2]) && int.Parse(line[0]) <= int.Parse(line[3]))
+                {
+                    pairsToReconsider++;
+                }
+                //c-d,a-b
+                //if d >= a and c <= b
+                else if (int.Parse(line[3]) >= int.Parse(line[0]) && int.Parse(line[2]) <= int.Parse(line[1]))
+                {
+                    pairsToReconsider++;
+                }
+            }
+
+            Console.WriteLine(pairsToReconsider);
+        }
+
     }
 }
