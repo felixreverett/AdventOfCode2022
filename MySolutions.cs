@@ -206,7 +206,48 @@ namespace AdventOfCode2022
 
         public void DayThreePartTwo()
         {
+            char[] letterPriorities =
+            {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+            };
 
+            string[] input = File.ReadAllText(@"D:\Programming\C#\AdventOfCode2022\Inputs\DayThree.txt")
+                .Replace("\r", "")
+                .Split("\n").ToArray();
+
+            int totalPriorityScore = 0;
+            
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (i % 3 == 0)
+                {
+                    
+                    char matchingChar = FindMeThatMatchingCharOneMoreTime(i);
+                    
+                    totalPriorityScore += Array.IndexOf(letterPriorities, matchingChar) + 1;
+                }
+            }
+
+            Console.WriteLine($"The sum of the priorities of the matching badges is: {totalPriorityScore}.");
+
+            char FindMeThatMatchingCharOneMoreTime(int index)
+            {
+                foreach (char a in input[index])
+                {
+                    foreach (char b in input[index + 1])
+                    {
+                        foreach (char c in input[index + 2])
+                        {
+                            if (a == b && b == c)
+                            {
+                                return a;
+                            }
+                        }
+                    }
+                }
+                return '_';
+            }
         }
     }
 }
