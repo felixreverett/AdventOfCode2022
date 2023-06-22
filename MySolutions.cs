@@ -312,35 +312,24 @@ namespace AdventOfCode2022
 
         public void DayFivePartOne()
         {
+            // Load data and split into respective sections
             string[] input = File.ReadAllText(@"D:\Programming\C#\AdventOfCode2022\Inputs\DayFive.txt")
                 .Replace("\r", "")
                 .Split("\n")
                 .ToArray();
-
             string[] commands = input.Where(n => n.StartsWith("move")).ToArray();
-
             string[] stackLines = input.Where(n => n.Contains("[")).ToArray();
-
             Array.Reverse(stackLines);
 
-            int stackIndexLength = input.Where(n => n.Contains(" 1")).ToArray()[0].Split("   ").ToArray().Length; //"good" code
-
+            // Parse the stack input into a list of Stack
             List<Objects.Stack> stacks = GenerateStacks(stackLines);
 
-            foreach (Objects.Stack stack in stacks)
-            {
-                Console.Write($"Stack {stack.Handle}: ");
-                foreach (char l in stack.Items)
-                {
-                    Console.Write(l);
-                }
-                Console.Write("\n");
-            }
-
+            // Reorder the stacks according to each instruction.
             stacks = RearrangeStacks(stacks, commands);
 
+            // Print the result to the console as output
+            // I would use a loop if I just wanted the last item
             Console.WriteLine("Rearranged stacks:");
-
             foreach (Objects.Stack stack in stacks)
             {
                 Console.Write($"Stack {stack.Handle}: ");
@@ -351,6 +340,7 @@ namespace AdventOfCode2022
                 Console.Write("\n");
             }
 
+            // Parse the input lines containing stack information
             List<Objects.Stack> GenerateStacks(string[] lines)
             {
                 List<Objects.Stack> stacks = new();
@@ -375,6 +365,7 @@ namespace AdventOfCode2022
                 return stacks;
             }
 
+            // Reorder the stacks
             List<Objects.Stack> RearrangeStacks(List<Objects.Stack> stacks, string[] commands)
             {
                 foreach (string command in commands)
@@ -390,6 +381,86 @@ namespace AdventOfCode2022
                         stacks[stackFrom - 1].Items.RemoveAt(topOfStack - 1);
                         stacks[stackTo - 1].Items.Add(movedChar);
                     }
+                }
+                return stacks;
+            }
+
+            // This line of code doesn't do anything (my solution didn't need it), but I enjoyed writing it so I've left it
+            int stackIndexLength = input.Where(n => n.Contains(" 1")).ToArray()[0].Split("   ").ToArray().Length; //"good" code
+        }
+
+        public void DayFivePartTwo()
+        {
+            // Load data and split into respective sections
+            string[] input = File.ReadAllText(@"D:\Programming\C#\AdventOfCode2022\Inputs\DayFive.txt")
+                .Replace("\r", "")
+                .Split("\n")
+                .ToArray();
+            string[] commands = input.Where(n => n.StartsWith("move")).ToArray();
+            string[] stackLines = input.Where(n => n.Contains("[")).ToArray();
+            Array.Reverse(stackLines);
+
+            // Parse the stack input into a list of Stack
+            List<Objects.Stack> stacks = GenerateStacks(stackLines);
+
+            // Reorder the stacks according to each instruction.
+            stacks = RearrangeStacks2(stacks, commands);
+
+            // Print the result to the console as output
+            // I would use a loop if I just wanted the last item
+            Console.WriteLine("Rearranged stacks:");
+            foreach (Objects.Stack stack in stacks)
+            {
+                Console.Write($"Stack {stack.Handle}: ");
+                foreach (char l in stack.Items)
+                {
+                    Console.Write(l);
+                }
+                Console.Write("\n");
+            }
+
+            // Parse the input lines containing stack information
+            List<Objects.Stack> GenerateStacks(string[] lines)
+            {
+                List<Objects.Stack> stacks = new();
+
+                foreach (string line in lines)
+                {
+                    int currentListIndex = 0;
+                    for (int i = 0; i < line.Length; i += 4)
+                    {
+                        if (line[i + 1] != ' ')
+                        {
+                            if (stacks.Count < currentListIndex + 1)
+                            {
+                                Objects.Stack newStack = new Objects.Stack((currentListIndex + 1).ToString());
+                                stacks.Add(newStack);
+                            }
+                            stacks[currentListIndex].Items.Add(line[i + 1]);
+                        }
+                        currentListIndex++;
+                    }
+                }
+                return stacks;
+            }
+
+            // Reorder the stacks
+            List<Objects.Stack> RearrangeStacks2(List<Objects.Stack> stacks, string[] commands)
+            {
+                foreach (string command in commands)
+                {
+                    // split the commands
+                    string[] subcommands = command.Split(" ").ToArray();
+                    int amount = int.Parse(subcommands[1]);
+                    int stackFrom = int.Parse(subcommands[3]);
+                    int stackTo = int.Parse(subcommands[5]);
+                    int startIndex = stacks[stackFrom - 1].Items.Count - amount;
+
+                    // move from one list to another using a "buffer" list
+                    List<char> charsToMove = stacks[stackFrom - 1].Items.GetRange(startIndex, amount);
+                    stacks[stackFrom - 1].Items.RemoveRange(startIndex, amount);
+                    stacks[stackTo - 1].Items.AddRange(charsToMove);
+                    
                 }
                 return stacks;
             }
